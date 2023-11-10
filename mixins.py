@@ -10,6 +10,11 @@ class InitGame:
     """Класс создания игрового пространства."""
 
     def __init__(self):
+        # запускаем музыкальное сопровождение
+        pygame.mixer.init()
+        pygame.mixer.music.load(settings.PATH_TO_GAME_MUSIC)
+        pygame.mixer.music.play(settings.INFINITY_LOOP)
+
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode(
