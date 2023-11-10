@@ -1,2 +1,14 @@
 FTP = 60
 
+TOP_OF_SCREEN = (0, 0)
+
+ASTERIX_POSITION = (300, 300)
+ASTERIX_SIZE = (300, 300)
+ASTERIX_SPEED = 5
+
+WHITE_COLOR = (255, 255, 255)
+
+
+PATH_TO_LANDSCAPE = 'images/landscape.png'
+PATH_TO_ASTERIX = 'images/asterix.jpg'
+
