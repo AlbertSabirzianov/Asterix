@@ -43,6 +43,28 @@ class InitGame:
         self.screen.blit(self.asterix_surf, self.asterix_rect)
         self.asterix_is_right = True
 
+        # Отображение письма
+        letter_img = pygame.image.load('images/letter.jpg')
+        letter_img.set_colorkey(settings.WHITE_COLOR)
+        self.letter_surf = pygame.transform.scale(
+            letter_img,
+            settings.LETTER_SIZE
+        )
+        self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
+        self.screen.blit(self.letter_surf, self.letter_rect)
+
+        # Отображение счёта
+        self.font = pygame.font.Font(None, settings.SCORE_FONT_SIZE)
+        self.text_score = self.font.render(
+            str(settings.START_SCORE),
+            1,
+            settings.WHITE_COLOR,
+            settings.BLACK_COLOR
+        )
+        self.text_score.set_colorkey(settings.BLACK_COLOR)
+        self.score_rect = self.text_score.get_rect(center=settings.SCORE_POSITION)
+        self.screen.blit(self.text_score, self.score_rect)
+
         # Настройки Римлян
         self.romans = pygame.sprite.Group()
         self.time_out = settings.ROMANS_TIME_OUT
@@ -117,7 +139,7 @@ class RomansMixin(EventMixin):
 
     def romans_go(self):
         self.time_out -= 1
-        if self.time_out == 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
+        if self.time_out <= 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
             self.time_out = settings.ROMANS_TIME_OUT
             self.add_roman_to_romans()
 

@@ -76,12 +76,18 @@ class Roman(pygame.sprite.Sprite):
         self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS + self.go_vectors
 
     def go(self):
-        vector = random.choice(self.vectors)
-        if len(self.go_vectors) < settings.ROMAIN_MAX_VECTORS_LENGTH:
+        if not self.go_vectors:
+            vector = random.choice(self.vectors)
             self.add_go_vectors(vector)
         self.go_vectors.pop()()
 
     def update(self, *args: Any, **kwargs: Any) -> None:
         self.go()
         if self.rect.colliderect(args[0]):
+            settings.START_SCORE += 1
             self.kill()
+
+
+class MagicFlask(pygame.sprite.Sprite):
+    """Класс фляжки с волшебным напитком."""
+    pass

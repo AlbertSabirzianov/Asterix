@@ -26,3 +26,13 @@ PATH_TO_LANDSCAPE = 'images/landscape.png'
 PATH_TO_ASTERIX = 'images/asterix.jpg'
 PATH_TO_GAME_MUSIC = 'music/game_music.mp3'
 PATH_TO_ROMANS = 'images/w-romans.png'
+PATH_TO_LETTER = 'images/letter.jpg'
+
+LETTER_POSITION = (50, 50)
+LETTER_SIZE = (80, 80)
+SCORE_POSITION = (50, 55)
+SCORE_FONT_SIZE = 80
+
+START_SCORE = 0
+
+

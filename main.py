@@ -16,10 +16,25 @@ class Game(mixins.RomansMixin):
                     pygame.quit()
                     sys.exit()
 
+            # Накладываем фон
+            self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
+
+            # Отображение счёта
+            self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
+            self.screen.blit(self.letter_surf, self.letter_rect)
+            self.text_score = self.font.render(
+                str(settings.START_SCORE),
+                True,
+                settings.WHITE_COLOR,
+                settings.BLACK_COLOR
+            )
+            self.text_score.set_colorkey(settings.BLACK_COLOR)
+            self.score_rect = self.text_score.get_rect(center=settings.SCORE_POSITION)
+            self.screen.blit(self.text_score, self.score_rect)
+
+            # движение Астерикса и Римлян
             self.asterix_go(pressed_buttons=pygame.key.get_pressed())
             self.romans_go()
-
-            self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
             self.romans.draw(self.screen)
 
             if self.asterix_is_right:
