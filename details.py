@@ -73,7 +73,7 @@ class Roman(pygame.sprite.Sprite):
             self.rect.y = self.HEIGHT_OF_SCREEN - self.rect.height
 
     def add_go_vectors(self, vector):
-        self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS + self.go_vectors
+        self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS
 
     def go(self):
         if not self.go_vectors:
