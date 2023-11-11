@@ -3,6 +3,8 @@
 основного класса игры Game.
 """
 import pygame
+
+import details
 import settings
 
 
@@ -17,6 +19,8 @@ class InitGame:
 
         pygame.init()
         self.clock = pygame.time.Clock()
+
+        # Настраеваем экран
         self.screen = pygame.display.set_mode(
             settings.TOP_OF_SCREEN,
             pygame.FULLSCREEN
@@ -30,12 +34,18 @@ class InitGame:
         img_surf = pygame.image.load(settings.PATH_TO_ASTERIX).convert()
         img_surf.set_colorkey(settings.WHITE_COLOR)
 
+        # Настройки астерикса
         self.asterix_surf = pygame.transform.scale(
             img_surf,
             settings.ASTERIX_SIZE
         )
         self.asterix_rect = self.asterix_surf.get_rect(center=settings.ASTERIX_POSITION)
         self.screen.blit(self.asterix_surf, self.asterix_rect)
+        self.asterix_is_right = True
+
+        # Настройки Римлян
+        self.romans = pygame.sprite.Group()
+        self.time_out = settings.ROMANS_TIME_OUT
 
 
 class EventMixin(InitGame):
@@ -56,6 +66,7 @@ class EventMixin(InitGame):
 
     def asterix_go_left(self) -> None:
         """Астерикс движется на лево."""
+        self.asterix_is_right = False
 
         self.asterix_rect.x -= settings.ASTERIX_SPEED
         if self.asterix_rect.x < 0:
@@ -63,6 +74,7 @@ class EventMixin(InitGame):
 
     def asterix_go_right(self) -> None:
         """Астерикс движется на право."""
+        self.asterix_is_right = True
 
         self.asterix_rect.x += settings.ASTERIX_SPEED
         if self.asterix_rect.x > self.right_wight:
@@ -93,3 +105,24 @@ class EventMixin(InitGame):
             self.asterix_go_down()
         if pressed_buttons[pygame.K_UP]:
             self.asterix_go_up()
+
+
+class RomansMixin(EventMixin):
+    """Класс для обработки Римлян."""
+
+    def add_roman_to_romans(self):
+        """Добавляем Римлянина в игру."""
+        roman = details.Roman()
+        self.romans.add(roman)
+
+    def romans_go(self):
+        self.time_out -= 1
+        if self.time_out == 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
+            self.time_out = settings.ROMANS_TIME_OUT
+            self.add_roman_to_romans()
+
+        self.romans.update(self.asterix_rect)
+
+
+
+
