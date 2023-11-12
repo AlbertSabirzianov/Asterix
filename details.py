@@ -1,10 +1,8 @@
 import random
-from typing import Any
 
 import pygame
 
 import settings
-
 
 romans = pygame.sprite.Group()
 
@@ -22,11 +20,11 @@ class Roman(pygame.sprite.Sprite):
         )
 
         pygame.sprite.Sprite.__init__(self)
+        img_surf = pygame.image.load(settings.PATH_TO_ROMANS)
         self.image = pygame.transform.scale(
-            pygame.image.load(settings.PATH_TO_ROMANS),
-            settings.ROMANS_SIZE
+            img_surf,
+            settings.get_size_of_character(img_surf, settings.ROMANS_SIZE_DIVIDER)
         ).convert_alpha()
-        self.image.set_colorkey(settings.BLACK_COLOR)
         self.rect = self.image.get_rect(
             center=self.PLACES_OF_BIRTH
         )

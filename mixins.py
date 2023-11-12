@@ -30,13 +30,12 @@ class InitGame:
             self.screen.get_size()
         )
 
-        img_surf = pygame.image.load(settings.PATH_TO_ASTERIX).convert()
-        img_surf.set_colorkey(settings.WHITE_COLOR)
+        img_surf = pygame.image.load(settings.PATH_TO_ASTERIX).convert_alpha()
 
         # Настройки астерикса
         self.asterix_surf = pygame.transform.scale(
             img_surf,
-            settings.ASTERIX_SIZE
+            settings.get_size_of_character(img_surf, settings.ASTERIX_SIZE_DIVIDER)
         )
         self.asterix_rect = self.asterix_surf.get_rect(center=settings.ASTERIX_POSITION)
         self.asterix_is_right = True
