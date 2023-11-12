@@ -32,6 +32,16 @@ class Game(mixins.FlaskMixin):
             self.score_rect = self.text_score.get_rect(center=settings.SCORE_POSITION)
             self.screen.blit(self.text_score, self.score_rect)
 
+            # отображение суперсилы
+            if settings.ASTERIX_HAS_SUPER_POWER:
+                self.super_power_rect = self.super_power_surf.get_rect(
+                    center=(
+                        self.WIGHT_OF_SCREEN - self.super_power_surf.get_width(),
+                        self.HEIGHT_OF_SCREEN - self.super_power_surf.get_height()
+                    )
+                )
+                self.screen.blit(self.super_power_surf, self.super_power_rect)
+
             # движение Астерикса и Римлян
             self.asterix_go(pressed_buttons=pygame.key.get_pressed())
             self.romans_go()
@@ -41,6 +51,7 @@ class Game(mixins.FlaskMixin):
             self.flask_go()
             self.flasks.draw(self.screen)
 
+            # отрисовка Астерикса
             if self.asterix_is_right:
                 self.screen.blit(self.asterix_surf, self.asterix_rect)
             else:

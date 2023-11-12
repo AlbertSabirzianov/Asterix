@@ -30,6 +30,10 @@ class InitGame:
             self.screen.get_size()
         )
 
+        # размеры экрана
+        self.WIGHT_OF_SCREEN = pygame.display.get_surface().get_width()
+        self.HEIGHT_OF_SCREEN = pygame.display.get_surface().get_height()
+
         img_surf = pygame.image.load(settings.PATH_TO_ASTERIX).convert_alpha()
 
         # Настройки астерикса
@@ -48,6 +52,10 @@ class InitGame:
             settings.LETTER_SIZE
         )
         self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
+
+        # оторажение суперсилы
+        self.super_power_surf = pygame.image.load('images/superpower_new.png')
+        self.super_power_rect = self.super_power_surf.get_rect()
 
         # Отображение счёта
         self.font = pygame.font.Font(None, settings.SCORE_FONT_SIZE)
