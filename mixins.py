@@ -29,7 +29,6 @@ class InitGame:
             pygame.image.load(settings.PATH_TO_LANDSCAPE),
             self.screen.get_size()
         )
-        self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
 
         img_surf = pygame.image.load(settings.PATH_TO_ASTERIX).convert()
         img_surf.set_colorkey(settings.WHITE_COLOR)
@@ -40,34 +39,26 @@ class InitGame:
             settings.ASTERIX_SIZE
         )
         self.asterix_rect = self.asterix_surf.get_rect(center=settings.ASTERIX_POSITION)
-        self.screen.blit(self.asterix_surf, self.asterix_rect)
         self.asterix_is_right = True
 
         # Отображение письма
-        letter_img = pygame.image.load('images/letter.jpg')
+        letter_img = pygame.image.load(settings.PATH_TO_LETTER)
         letter_img.set_colorkey(settings.WHITE_COLOR)
         self.letter_surf = pygame.transform.scale(
             letter_img,
             settings.LETTER_SIZE
         )
         self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
-        self.screen.blit(self.letter_surf, self.letter_rect)
 
         # Отображение счёта
         self.font = pygame.font.Font(None, settings.SCORE_FONT_SIZE)
-        self.text_score = self.font.render(
-            str(settings.START_SCORE),
-            1,
-            settings.WHITE_COLOR,
-            settings.BLACK_COLOR
-        )
-        self.text_score.set_colorkey(settings.BLACK_COLOR)
-        self.score_rect = self.text_score.get_rect(center=settings.SCORE_POSITION)
-        self.screen.blit(self.text_score, self.score_rect)
 
         # Настройки Римлян
         self.romans = pygame.sprite.Group()
         self.time_out = settings.ROMANS_TIME_OUT
+
+        # Настройки фляжки
+        self.flasks = pygame.sprite.Group()
 
 
 class EventMixin(InitGame):
@@ -138,7 +129,7 @@ class RomansMixin(EventMixin):
         self.romans.add(roman)
 
     def romans_go(self):
-        self.time_out -= 1
+        self.time_out -= settings.ROMANS_TIME_OUT_ENDS_SPEED
         if self.time_out <= 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
             self.time_out = settings.ROMANS_TIME_OUT
             self.add_roman_to_romans()
@@ -146,5 +137,21 @@ class RomansMixin(EventMixin):
         self.romans.update(self.asterix_rect)
 
 
+class FlaskMixin(RomansMixin):
+
+    def add_flask_to_flasks(self):
+        flask = details.MagicFlask()
+        self.flasks.add(flask)
+
+    def flask_go(self):
+
+        if settings.ASTERIX_HAS_SUPER_POWER:
+            settings.ASTERIX_SUPER_POWER_TIME_OUT -= settings.ASTERIX_SUPER_POWER_ENDS_SPEED
+        if settings.ASTERIX_SUPER_POWER_TIME_OUT <= 0:
+            settings.ASTERIX_HAS_SUPER_POWER = False
+
+        if not settings.ASTERIX_HAS_SUPER_POWER and not self.flasks:
+            self.add_flask_to_flasks()
+        self.flasks.update(self.asterix_rect)
 
 

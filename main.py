@@ -6,7 +6,7 @@ import settings
 import mixins
 
 
-class Game(mixins.RomansMixin):
+class Game(mixins.FlaskMixin):
 
     def run_game(self):
 
@@ -36,6 +36,10 @@ class Game(mixins.RomansMixin):
             self.asterix_go(pressed_buttons=pygame.key.get_pressed())
             self.romans_go()
             self.romans.draw(self.screen)
+
+            # появление волшебной фляжки
+            self.flask_go()
+            self.flasks.draw(self.screen)
 
             if self.asterix_is_right:
                 self.screen.blit(self.asterix_surf, self.asterix_rect)
