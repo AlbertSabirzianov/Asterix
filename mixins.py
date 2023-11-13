@@ -19,10 +19,12 @@ class InitGame:
         pygame.mixer.music.load(settings.PATH_TO_GAME_MUSIC)
         pygame.mixer.music.play(settings.INFINITY_LOOP)
 
+        # загружаем игровую музыку
         self.hit_music = pygame.mixer.Sound(settings.PATH_TO_HIT_MUSIC)
         self.flask_music = pygame.mixer.Sound(settings.PATH_TO_FLASK_MUSIC)
         self.crash_music = pygame.mixer.Sound(settings.PATH_TO_CRASH_MUSIC)
         self.win_music = pygame.mixer.Sound(settings.PATH_TO_WINNING_MUSIC)
+        self.romans_fly_music = pygame.mixer.Sound(settings.PATH_TO_ROMANS_FLY_MUSIC)
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -69,6 +71,8 @@ class InitGame:
         # Настройки Римлян
         self.romans = pygame.sprite.Group()
         self.time_out = settings.ROMANS_TIME_OUT
+
+        self.cesar = pygame.sprite.Group()
 
         # Настройки фляжки
         self.flasks = pygame.sprite.Group()
@@ -162,7 +166,7 @@ class RomansMixin(EventMixin):
                 self.time_out = settings.ROMANS_TIME_OUT
                 self.add_roman_to_romans()
 
-        self.romans.update(self.asterix_rect, self.hit_music, self.crash_music)
+        self.romans.update(self.asterix_rect, self.hit_music, self.crash_music, self.romans_fly_music)
 
 
 class FlaskMixin(RomansMixin):
@@ -200,6 +204,7 @@ class GameOverMenuMixin(FlaskMixin):
         settings.ASTERIX_HAS_SUPER_POWER = self.ASTERIX_HAS_SUPER_POWER
         settings.ASTERIX_SUPER_POWER_TIME_OUT = self.ASTERIX_SUPER_POWER_TIME_OUT
         settings.START_SCORE = self.START_SCORE
+        settings.GAMER_ALREADY_WIN = False
 
         for roman in self.romans:
             roman.kill()
@@ -274,3 +279,18 @@ class GameOverMenuMixin(FlaskMixin):
 
             pygame.display.update()
             self.clock.tick(settings.FTP)
+
+
+class CesarMixin(GameOverMenuMixin):
+    """Класс действий Цезаря."""
+
+    @property
+    def gamer_win_romans(self) -> bool:
+        """Победил ли игрок всех римлян."""
+        return settings.START_SCORE >= settings.ROMANS_ARMY_SIZE
+
+    def cesar_go(self):
+
+        if self.gamer_win_romans and len(self.cesar) == 0:
+            self.cesar.add(details.Cesar())
+        self.cesar.update(self.asterix_rect)

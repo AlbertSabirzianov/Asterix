@@ -4,8 +4,6 @@ import pygame
 
 import settings
 
-romans = pygame.sprite.Group()
-
 
 class Roman(pygame.sprite.Sprite):
     """Класс Римлянина."""
@@ -36,6 +34,7 @@ class Roman(pygame.sprite.Sprite):
         ]
         self.go_vectors = []
         self.crush_music_time_out = 0
+        self.is_killed = False
 
     def go_left(self):
         self.rect.x -= settings.ROMANS_SPEED
@@ -66,13 +65,25 @@ class Roman(pygame.sprite.Sprite):
             self.add_go_vectors(vector)
         self.go_vectors.pop()()
 
-    def update(self, asterix_rect, hit_music, crush_music) -> None:
+    def fly_away(self):
+        """Римлянин улетает."""
+
+        self.rect.y -= settings.ROMANS_FLY_SPEED
+        if self.rect.y <= 0:
+            self.kill()
+
+    def update(self, asterix_rect, hit_music, crush_music, fly_music) -> None:
+        if self.is_killed:
+            self.fly_away()
+            return
+
         self.go()
         if self.rect.colliderect(asterix_rect):
             if settings.ASTERIX_HAS_SUPER_POWER:
-                settings.START_SCORE += settings.SCORE_INCREASE
+                settings.START_SCORE += settings.SCORE_UP_SPEED
                 hit_music.play()
-                self.kill()
+                fly_music.play()
+                self.is_killed = True
             else:
                 if self.crush_music_time_out <= 0:
                     crush_music.play()
@@ -104,3 +115,72 @@ class MagicFlask(pygame.sprite.Sprite):
             settings.ASTERIX_SUPER_POWER_TIME_OUT = self.SUPER_POWER_TIME_OUT
             flask_music.play()
             self.kill()
+
+
+class Cesar(pygame.sprite.Sprite):
+    """Класс цезаря."""
+
+    def __init__(self):
+        self.WIGHT_OF_SCREEN = pygame.display.get_surface().get_width()
+        self.HEIGHT_OF_SCREEN = pygame.display.get_surface().get_height()
+
+        self.PLACES_OF_BIRTH = (
+            random.randint(settings.ROMANS_INDENT, self.WIGHT_OF_SCREEN),
+            random.randint(settings.ROMANS_INDENT, self.HEIGHT_OF_SCREEN)
+        )
+
+        pygame.sprite.Sprite.__init__(self)
+        cesar_image = pygame.image.load(settings.PATH_TO_CESAR).convert_alpha()
+        self.image = pygame.transform.scale(
+            cesar_image,
+            settings.get_size_of_character(
+                cesar_image,
+                settings.CESAR_SIZE_DIVIDER
+            )
+        )
+        self.rect = self.image.get_rect(
+            center=self.PLACES_OF_BIRTH
+        )
+        self.vectors = [
+            self.go_up,
+            self.go_down,
+            self.go_right,
+            self.go_left,
+        ]
+        self.go_vectors = []
+
+    def go_left(self):
+        self.rect.x -= settings.ROMANS_SPEED
+        if self.rect.x <= 0:
+            self.rect.x = 0
+
+    def go_right(self):
+        self.rect.x += settings.ROMANS_SPEED
+        if self.rect.x >= self.WIGHT_OF_SCREEN - self.rect.width:
+            self.rect.x = self.WIGHT_OF_SCREEN - self.rect.width
+
+    def go_up(self):
+        self.rect.y -= settings.ROMANS_SPEED
+        if self.rect.y <= 0:
+            self.rect.y = 0
+
+    def go_down(self):
+        self.rect.y += settings.ROMANS_SPEED
+        if self.rect.y >= self.HEIGHT_OF_SCREEN - self.rect.height:
+            self.rect.y = self.HEIGHT_OF_SCREEN - self.rect.height
+
+    def add_go_vectors(self, vector):
+        self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS
+
+    def go(self):
+        if not self.go_vectors:
+            vector = random.choice(self.vectors)
+            self.add_go_vectors(vector)
+        self.go_vectors.pop()()
+
+    def update(self, asterix_rect) -> None:
+        self.go()
+
+        if self.rect.colliderect(asterix_rect):
+            self.kill()
+            settings.GAMER_ALREADY_WIN = True

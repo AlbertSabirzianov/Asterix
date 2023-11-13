@@ -6,7 +6,7 @@ import settings
 import mixins
 
 
-class Game(mixins.GameOverMenuMixin):
+class Game(mixins.CesarMixin):
 
     def run_game(self):
 
@@ -18,7 +18,7 @@ class Game(mixins.GameOverMenuMixin):
 
             if settings.ASTERIX_LIVES <= 0:
                 self.game_over_menu(text=settings.LOSE_GAME_TEXT)
-            if settings.START_SCORE >= settings.ROMANS_ARMY_SIZE:
+            if settings.GAMER_ALREADY_WIN:
                 self.game_over_menu(text=settings.WINING_GAME_TEXT)
 
             # Накладываем фон
@@ -26,7 +26,7 @@ class Game(mixins.GameOverMenuMixin):
 
             # Отображение Жизней
             self.lives_surf = self.font.render(
-                str(settings.ASTERIX_LIVES),
+                str(int(settings.ASTERIX_LIVES)),
                 True,
                 settings.WHITE_COLOR,
                 None
@@ -62,6 +62,8 @@ class Game(mixins.GameOverMenuMixin):
             self.asterix_go(pressed_buttons=pygame.key.get_pressed())
             self.romans_go()
             self.romans.draw(self.screen)
+            self.cesar_go()
+            self.cesar.draw(self.screen)
 
             # появление волшебной фляжки
             self.flask_go()
