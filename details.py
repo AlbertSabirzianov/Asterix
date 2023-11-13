@@ -65,10 +65,11 @@ class Roman(pygame.sprite.Sprite):
             self.add_go_vectors(vector)
         self.go_vectors.pop()()
 
-    def update(self, asterix_rect) -> None:
+    def update(self, asterix_rect, hit_music) -> None:
         self.go()
         if self.rect.colliderect(asterix_rect):
             settings.START_SCORE += settings.SCORE_INCREASE
+            hit_music.play()
             self.kill()
 
 
@@ -81,8 +82,9 @@ class MagicFlask(pygame.sprite.Sprite):
         self.image = pygame.image.load(settings.PATH_TO_FLASK)
         self.rect = self.image.get_rect(center=settings.FLASK_POSITION)
 
-    def update(self, asterix_rect) -> None:
+    def update(self, asterix_rect, flask_music) -> None:
         if self.rect.colliderect(asterix_rect):
             settings.ASTERIX_HAS_SUPER_POWER = True
             settings.ASTERIX_SUPER_POWER_TIME_OUT = self.SUPER_POWER_TIME_OUT
+            flask_music.play()
             self.kill()

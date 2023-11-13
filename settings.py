@@ -28,12 +28,17 @@ BLACK_COLOR = (0, 0, 0)
 
 INFINITY_LOOP = -1
 
+# пути до картинок
 PATH_TO_LANDSCAPE = 'images/landscape.png'
 PATH_TO_ASTERIX = 'images/Asterix_new_3.png'
-PATH_TO_GAME_MUSIC = 'music/game_music.mp3'
 PATH_TO_ROMANS = 'images/w-romans.png'
 PATH_TO_LETTER = 'images/letter.jpg'
 PATH_TO_FLASK = 'images/magic-flask.png'
+
+# пути до музыки
+PATH_TO_GAME_MUSIC = 'music/game_music.mp3'
+PATH_TO_HIT_MUSIC = 'music/hit.wav'
+PATH_TO_FLASK_MUSIC = 'music/flask.wav'
 
 LETTER_POSITION = (50, 50)
 LETTER_SIZE = (80, 80)

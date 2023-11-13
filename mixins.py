@@ -17,6 +17,9 @@ class InitGame:
         pygame.mixer.music.load(settings.PATH_TO_GAME_MUSIC)
         pygame.mixer.music.play(settings.INFINITY_LOOP)
 
+        self.hit_music = pygame.mixer.Sound(settings.PATH_TO_HIT_MUSIC)
+        self.flask_music = pygame.mixer.Sound(settings.PATH_TO_FLASK_MUSIC)
+
         pygame.init()
         self.clock = pygame.time.Clock()
 
@@ -141,7 +144,7 @@ class RomansMixin(EventMixin):
             self.time_out = settings.ROMANS_TIME_OUT
             self.add_roman_to_romans()
 
-        self.romans.update(self.asterix_rect)
+        self.romans.update(self.asterix_rect, self.hit_music)
 
 
 class FlaskMixin(RomansMixin):
@@ -159,6 +162,6 @@ class FlaskMixin(RomansMixin):
 
         if not settings.ASTERIX_HAS_SUPER_POWER and not self.flasks:
             self.add_flask_to_flasks()
-        self.flasks.update(self.asterix_rect)
+        self.flasks.update(self.asterix_rect, self.flask_music)
 
 
