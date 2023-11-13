@@ -68,19 +68,29 @@ class Roman(pygame.sprite.Sprite):
     def update(self, asterix_rect, hit_music) -> None:
         self.go()
         if self.rect.colliderect(asterix_rect):
-            settings.START_SCORE += settings.SCORE_INCREASE
-            hit_music.play()
-            self.kill()
-
+            if settings.ASTERIX_HAS_SUPER_POWER:
+                settings.START_SCORE += settings.SCORE_INCREASE
+                hit_music.play()
+                self.kill()
+            else:
+                settings.ASTERIX_LIVES -= settings.ASTERIX_LIVES_INCREASE
 
 class MagicFlask(pygame.sprite.Sprite):
     """Класс фляжки с волшебным напитком."""
     SUPER_POWER_TIME_OUT = settings.ASTERIX_SUPER_POWER_TIME_OUT
 
     def __init__(self):
+        self.WIGHT_OF_SCREEN = pygame.display.get_surface().get_width()
+        self.HEIGHT_OF_SCREEN = pygame.display.get_surface().get_height()
+
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(settings.PATH_TO_FLASK)
-        self.rect = self.image.get_rect(center=settings.FLASK_POSITION)
+        self.rect = self.image.get_rect(
+            center=(
+                random.randint(self.image.get_width(), self.WIGHT_OF_SCREEN - self.image.get_width()),
+                random.randint(self.image.get_height(), self.HEIGHT_OF_SCREEN - self.image.get_height())
+            )
+        )
 
     def update(self, asterix_rect, flask_music) -> None:
         if self.rect.colliderect(asterix_rect):

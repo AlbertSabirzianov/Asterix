@@ -19,18 +19,30 @@ class Game(mixins.FlaskMixin):
             # Накладываем фон
             self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
 
-            # Отображение счёта
-            self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
-            self.screen.blit(self.letter_surf, self.letter_rect)
-            self.text_score = self.font.render(
-                str(settings.START_SCORE),
+            # Отображение Жизней
+            self.lives_surf = self.font.render(
+                str(settings.ASTERIX_LIVES),
                 True,
                 settings.WHITE_COLOR,
                 settings.BLACK_COLOR
             )
-            self.text_score.set_colorkey(settings.BLACK_COLOR)
-            self.score_rect = self.text_score.get_rect(center=settings.SCORE_POSITION)
-            self.screen.blit(self.text_score, self.score_rect)
+            self.lives_surf.set_colorkey(settings.BLACK_COLOR)
+            self.lives_rect = self.lives_surf.get_rect(
+                center=(
+                    self.lives_surf.get_width() // 2,
+                    self.lives_surf.get_height() // 2
+                )
+            )
+            self.screen.blit(self.lives_surf, self.lives_rect)
+
+            # отображение каски
+            self.casca_rect = self.casca_surf.get_rect(
+                center=(
+                    self.lives_surf.get_width() + (self.casca_surf.get_width() // 2),
+                    self.casca_surf.get_height() // 2
+                )
+            )
+            self.screen.blit(self.casca_surf, self.casca_rect)
 
             # отображение суперсилы
             if settings.ASTERIX_HAS_SUPER_POWER:

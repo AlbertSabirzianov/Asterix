@@ -47,21 +47,19 @@ class InitGame:
         self.asterix_rect = self.asterix_surf.get_rect(center=settings.ASTERIX_POSITION)
         self.asterix_is_right = True
 
-        # Отображение письма
-        letter_img = pygame.image.load(settings.PATH_TO_LETTER)
-        letter_img.set_colorkey(settings.WHITE_COLOR)
-        self.letter_surf = pygame.transform.scale(
-            letter_img,
-            settings.LETTER_SIZE
-        )
-        self.letter_rect = self.letter_surf.get_rect(center=settings.LETTER_POSITION)
-
         # оторажение суперсилы
         self.super_power_surf = pygame.image.load('images/superpower_new.png')
         self.super_power_rect = self.super_power_surf.get_rect()
 
-        # Отображение счёта
-        self.font = pygame.font.Font(None, settings.SCORE_FONT_SIZE)
+        # Отображение жизней Астерикса
+        self.font = pygame.font.SysFont(settings.FONT, settings.FONT_SIZE)
+
+        # Отображение каски
+        casca_img_surf = pygame.image.load('images/casca.png').convert_alpha()
+        self.casca_surf = pygame.transform.scale(
+            casca_img_surf,
+            settings.get_size_of_character(casca_img_surf, settings.CASCCA_DIVIDER)
+        )
 
         # Настройки Римлян
         self.romans = pygame.sprite.Group()
@@ -87,11 +85,20 @@ class EventMixin(InitGame):
     def right_wight(self):
         return self.screen.get_width() - self.asterix_rect.width
 
+    @property
+    def asterix_speed(self):
+        """Вычисляет скорость Астерикса в зависимости от суперсилы."""
+        speed_data = {
+            False: settings.ASTERIX_SPEED,
+            True: settings.ASTERIX_MAGIC_SPEED
+        }
+        return speed_data[settings.ASTERIX_HAS_SUPER_POWER]
+
     def asterix_go_left(self) -> None:
         """Астерикс движется на лево."""
         self.asterix_is_right = False
 
-        self.asterix_rect.x -= settings.ASTERIX_SPEED
+        self.asterix_rect.x -= self.asterix_speed
         if self.asterix_rect.x < 0:
             self.asterix_rect.x = 0
 
@@ -99,21 +106,21 @@ class EventMixin(InitGame):
         """Астерикс движется на право."""
         self.asterix_is_right = True
 
-        self.asterix_rect.x += settings.ASTERIX_SPEED
+        self.asterix_rect.x += self.asterix_speed
         if self.asterix_rect.x > self.right_wight:
             self.asterix_rect.x = self.right_wight
 
     def asterix_go_down(self) -> None:
         """Астерикс движется вниз."""
 
-        self.asterix_rect.y += settings.ASTERIX_SPEED
+        self.asterix_rect.y += self.asterix_speed
         if self.asterix_rect.y > self.bottom_height:
             self.asterix_rect.y = self.bottom_height
 
     def asterix_go_up(self) -> None:
         """Астерикс движется вверх."""
 
-        self.asterix_rect.y -= settings.ASTERIX_SPEED
+        self.asterix_rect.y -= self.asterix_speed
         if self.asterix_rect.y < 0:
             self.asterix_rect.y = 0
 
