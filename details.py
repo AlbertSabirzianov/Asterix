@@ -35,6 +35,7 @@ class Roman(pygame.sprite.Sprite):
             self.go_left,
         ]
         self.go_vectors = []
+        self.crush_music_time_out = 0
 
     def go_left(self):
         self.rect.x -= settings.ROMANS_SPEED
@@ -65,7 +66,7 @@ class Roman(pygame.sprite.Sprite):
             self.add_go_vectors(vector)
         self.go_vectors.pop()()
 
-    def update(self, asterix_rect, hit_music) -> None:
+    def update(self, asterix_rect, hit_music, crush_music) -> None:
         self.go()
         if self.rect.colliderect(asterix_rect):
             if settings.ASTERIX_HAS_SUPER_POWER:
@@ -73,7 +74,12 @@ class Roman(pygame.sprite.Sprite):
                 hit_music.play()
                 self.kill()
             else:
-                settings.ASTERIX_LIVES -= settings.ASTERIX_LIVES_INCREASE
+                if self.crush_music_time_out <= 0:
+                    crush_music.play()
+                    self.crush_music_time_out = settings.ROMANS_CRUSH_MUSIC_TIME_OUT
+                settings.ASTERIX_LIVES -= settings.ASTERIX_LIVES_ENDS_SPEED
+                self.crush_music_time_out -= settings.ROMANS_CRUSH_MUSIC_ENDS_SPEED
+
 
 class MagicFlask(pygame.sprite.Sprite):
     """Класс фляжки с волшебным напитком."""

@@ -2,6 +2,8 @@
 Классы миксины для разного функционала
 основного класса игры Game.
 """
+import sys
+
 import pygame
 
 import details
@@ -19,6 +21,7 @@ class InitGame:
 
         self.hit_music = pygame.mixer.Sound(settings.PATH_TO_HIT_MUSIC)
         self.flask_music = pygame.mixer.Sound(settings.PATH_TO_FLASK_MUSIC)
+        self.crash_music = pygame.mixer.Sound(settings.PATH_TO_CRASH_MUSIC)
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -151,10 +154,11 @@ class RomansMixin(EventMixin):
             self.time_out = settings.ROMANS_TIME_OUT
             self.add_roman_to_romans()
 
-        self.romans.update(self.asterix_rect, self.hit_music)
+        self.romans.update(self.asterix_rect, self.hit_music, self.crash_music)
 
 
 class FlaskMixin(RomansMixin):
+    """Класс обработки волшебного напитка."""
 
     def add_flask_to_flasks(self):
         flask = details.MagicFlask()
@@ -172,3 +176,33 @@ class FlaskMixin(RomansMixin):
         self.flasks.update(self.asterix_rect, self.flask_music)
 
 
+class GameOverMenuMixin(FlaskMixin):
+    """
+    Класс с меню "Конец Игры"
+    """
+
+    def game_over_menu(self):
+        while True:
+            for event in pygame.event.get():
+                if self.is_pressed_esc(event):
+                    pygame.quit()
+                    sys.exit()
+
+            self.screen.fill(settings.BLACK_COLOR)
+
+            game_over_text = self.font.render(
+                'GAME_OVER',
+                True,
+                settings.WHITE_COLOR,
+                settings.BLACK_COLOR
+            )
+            game_over_rect = game_over_text.get_rect(
+                center=(
+                    self.WIGHT_OF_SCREEN // 2,
+                    self.HEIGHT_OF_SCREEN // 2,
+                )
+            )
+            self.screen.blit(game_over_text, game_over_rect)
+
+            pygame.display.update()
+            self.clock.tick(settings.FTP)

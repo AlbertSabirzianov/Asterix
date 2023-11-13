@@ -6,7 +6,7 @@ import settings
 import mixins
 
 
-class Game(mixins.FlaskMixin):
+class Game(mixins.GameOverMenuMixin):
 
     def run_game(self):
 
@@ -15,6 +15,9 @@ class Game(mixins.FlaskMixin):
                 if self.is_pressed_esc(event):
                     pygame.quit()
                     sys.exit()
+
+            if settings.ASTERIX_LIVES <= 0:
+                self.game_over_menu()
 
             # Накладываем фон
             self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
