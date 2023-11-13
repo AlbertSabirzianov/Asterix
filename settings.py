@@ -47,6 +47,7 @@ PATH_TO_GAME_MUSIC = 'music/game_music.mp3'
 PATH_TO_HIT_MUSIC = 'music/hit.wav'
 PATH_TO_FLASK_MUSIC = 'music/flask.wav'
 PATH_TO_CRASH_MUSIC = 'music/mech-zvonkiy-yarkiy.wav'
+PATH_TO_WINNING_MUSIC = 'music/fanfar.wav'
 
 CASCCA_DIVIDER = 15
 

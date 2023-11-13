@@ -22,6 +22,7 @@ class InitGame:
         self.hit_music = pygame.mixer.Sound(settings.PATH_TO_HIT_MUSIC)
         self.flask_music = pygame.mixer.Sound(settings.PATH_TO_FLASK_MUSIC)
         self.crash_music = pygame.mixer.Sound(settings.PATH_TO_CRASH_MUSIC)
+        self.win_music = pygame.mixer.Sound(settings.PATH_TO_WINNING_MUSIC)
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -243,6 +244,10 @@ class GameOverMenuMixin(FlaskMixin):
                 help_text.get_height() // 2
             )
         )
+
+        if text == settings.WINING_GAME_TEXT:
+            self.win_music.play()
+
         while in_menu:
             for event in pygame.event.get():
                 if self.is_pressed_esc(event):

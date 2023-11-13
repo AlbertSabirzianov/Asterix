@@ -29,9 +29,8 @@ class Game(mixins.GameOverMenuMixin):
                 str(settings.ASTERIX_LIVES),
                 True,
                 settings.WHITE_COLOR,
-                settings.BLACK_COLOR
+                None
             )
-            self.lives_surf.set_colorkey(settings.BLACK_COLOR)
             self.lives_rect = self.lives_surf.get_rect(
                 center=(
                     self.lives_surf.get_width() // 2,
