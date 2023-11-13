@@ -40,6 +40,7 @@ PATH_TO_LANDSCAPE = 'images/landscape.png'
 PATH_TO_ASTERIX = 'images/Asterix_new_3.png'
 PATH_TO_ROMANS = 'images/w-romans.png'
 PATH_TO_FLASK = 'images/magic-flask.png'
+PATH_TO_ASTERIX_AND_IDEA_FIX = 'images/asterix_and_ideafix.png'
 
 # пути до музыки
 PATH_TO_GAME_MUSIC = 'music/game_music.mp3'
@@ -50,9 +51,13 @@ PATH_TO_CRASH_MUSIC = 'music/mech-zvonkiy-yarkiy.wav'
 CASCCA_DIVIDER = 15
 
 FONT_SIZE = 80
+MINI_FONT_SIZE = 40
 FONT = 'script'
 SCORE_INCREASE = 1
 START_SCORE = 0 # меняется во время игры
+
+HELP_TEXT = 'press enter to continue, ' \
+            'press esc to exit'
 
 
 def get_size_of_character(img_srf, divider) -> Tuple[int, int]:

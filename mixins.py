@@ -56,6 +56,7 @@ class InitGame:
 
         # Отображение жизней Астерикса
         self.font = pygame.font.SysFont(settings.FONT, settings.FONT_SIZE)
+        self.mini_font = pygame.font.SysFont(settings.FONT, settings.MINI_FONT_SIZE)
 
         # Отображение каски
         casca_img_surf = pygame.image.load('images/casca.png').convert_alpha()
@@ -186,6 +187,7 @@ class GameOverMenuMixin(FlaskMixin):
     """
     Класс с меню "Конец Игры"
     """
+    # Сохраняем изменяемые переменные, чтобы перезапустить игру
     ASTERIX_LIVES = settings.ASTERIX_LIVES
     ASTERIX_HAS_SUPER_POWER = settings.ASTERIX_HAS_SUPER_POWER
     ASTERIX_SUPER_POWER_TIME_OUT = settings.ASTERIX_SUPER_POWER_TIME_OUT
@@ -202,7 +204,45 @@ class GameOverMenuMixin(FlaskMixin):
             roman.kill()
 
     def game_over_menu(self, text):
+        """Меню конца игры."""
+
         in_menu = True
+
+        asterix_and_idea_fix_surf = pygame.image.load(
+            settings.PATH_TO_ASTERIX_AND_IDEA_FIX
+        ).convert_alpha()
+        asterix_and_idea_fix_rect = asterix_and_idea_fix_surf.get_rect(
+            center=(
+                asterix_and_idea_fix_surf.get_width() // 2,
+                self.HEIGHT_OF_SCREEN - asterix_and_idea_fix_surf.get_height() // 2
+            )
+        )
+
+        game_over_text = self.font.render(
+            text,
+            True,
+            settings.WHITE_COLOR,
+            None
+        )
+        game_over_rect = game_over_text.get_rect(
+            center=(
+                self.WIGHT_OF_SCREEN // 2,
+                self.HEIGHT_OF_SCREEN // 2,
+            )
+        )
+
+        help_text = self.mini_font.render(
+            settings.HELP_TEXT,
+            True,
+            settings.WHITE_COLOR,
+            None
+        )
+        help_text_rect = help_text.get_rect(
+            center=(
+                self.WIGHT_OF_SCREEN // 2,
+                help_text.get_height() // 2
+            )
+        )
         while in_menu:
             for event in pygame.event.get():
                 if self.is_pressed_esc(event):
@@ -212,21 +252,20 @@ class GameOverMenuMixin(FlaskMixin):
                     self.game_reset()
                     in_menu = False
 
+            # закрашиваем экран
             self.screen.fill(settings.BLACK_COLOR)
 
-            game_over_text = self.font.render(
-                text,
-                True,
-                settings.WHITE_COLOR,
-                settings.BLACK_COLOR
+            # обавляем Астерикса и диафикса на экран
+            self.screen.blit(
+                asterix_and_idea_fix_surf,
+                asterix_and_idea_fix_rect
             )
-            game_over_rect = game_over_text.get_rect(
-                center=(
-                    self.WIGHT_OF_SCREEN // 2,
-                    self.HEIGHT_OF_SCREEN // 2,
-                )
-            )
+
+            # отображаем результат игры
             self.screen.blit(game_over_text, game_over_rect)
+
+            # отображаем вспомагательный текст
+            self.screen.blit(help_text, help_text_rect)
 
             pygame.display.update()
             self.clock.tick(settings.FTP)
