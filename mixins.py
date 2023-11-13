@@ -80,6 +80,11 @@ class EventMixin(InitGame):
         """Нажата ли кнопка выхода - Esc."""
         return event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
 
+    @staticmethod
+    def is_pressed_enter(event) -> bool:
+        """Нажата ли кнопка продолжения игры - Enter."""
+        return event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN
+
     @property
     def bottom_height(self):
         return self.screen.get_height() - self.asterix_rect.height
@@ -150,9 +155,10 @@ class RomansMixin(EventMixin):
 
     def romans_go(self):
         self.time_out -= settings.ROMANS_TIME_OUT_ENDS_SPEED
-        if self.time_out <= 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
-            self.time_out = settings.ROMANS_TIME_OUT
-            self.add_roman_to_romans()
+        if settings.START_SCORE < settings.ROMANS_ARMY_SIZE:
+            if self.time_out <= 0 and len(self.romans) < settings.ROMANS_MAX_AMOUNT:
+                self.time_out = settings.ROMANS_TIME_OUT
+                self.add_roman_to_romans()
 
         self.romans.update(self.asterix_rect, self.hit_music, self.crash_music)
 
@@ -180,18 +186,36 @@ class GameOverMenuMixin(FlaskMixin):
     """
     Класс с меню "Конец Игры"
     """
+    ASTERIX_LIVES = settings.ASTERIX_LIVES
+    ASTERIX_HAS_SUPER_POWER = settings.ASTERIX_HAS_SUPER_POWER
+    ASTERIX_SUPER_POWER_TIME_OUT = settings.ASTERIX_SUPER_POWER_TIME_OUT
+    START_SCORE = settings.START_SCORE
 
-    def game_over_menu(self):
-        while True:
+    def game_reset(self):
+        """Возвращает настройки игры к первоначальным"""
+        settings.ASTERIX_LIVES = self.ASTERIX_LIVES
+        settings.ASTERIX_HAS_SUPER_POWER = self.ASTERIX_HAS_SUPER_POWER
+        settings.ASTERIX_SUPER_POWER_TIME_OUT = self.ASTERIX_SUPER_POWER_TIME_OUT
+        settings.START_SCORE = self.START_SCORE
+
+        for roman in self.romans:
+            roman.kill()
+
+    def game_over_menu(self, text):
+        in_menu = True
+        while in_menu:
             for event in pygame.event.get():
                 if self.is_pressed_esc(event):
                     pygame.quit()
                     sys.exit()
+                if self.is_pressed_enter(event):
+                    self.game_reset()
+                    in_menu = False
 
             self.screen.fill(settings.BLACK_COLOR)
 
             game_over_text = self.font.render(
-                'GAME_OVER',
+                text,
                 True,
                 settings.WHITE_COLOR,
                 settings.BLACK_COLOR

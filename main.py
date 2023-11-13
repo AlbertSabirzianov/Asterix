@@ -17,7 +17,9 @@ class Game(mixins.GameOverMenuMixin):
                     sys.exit()
 
             if settings.ASTERIX_LIVES <= 0:
-                self.game_over_menu()
+                self.game_over_menu(text=settings.LOSE_GAME_TEXT)
+            if settings.START_SCORE >= settings.ROMANS_ARMY_SIZE:
+                self.game_over_menu(text=settings.WINING_GAME_TEXT)
 
             # Накладываем фон
             self.screen.blit(self.landscape, settings.TOP_OF_SCREEN)
