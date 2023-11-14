@@ -1,3 +1,7 @@
+"""
+ Файл с классами персонажей, появляющихся в игре:
+ Римляне, Фляга с волшебным напитком, Цезарь.
+"""
 import random
 
 import pygame
@@ -7,6 +11,8 @@ import settings
 
 class Roman(pygame.sprite.Sprite):
     """Класс Римлянина."""
+    CRASH_MUSIC_TIME_OUT = settings.ROMANS_CRUSH_MUSIC_TIME_OUT
+    CRASH_MUSIC_ENDS_SPEED = settings.ROMANS_CRUSH_MUSIC_ENDS_SPEED
 
     def __init__(self):
         self.WIGHT_OF_SCREEN = pygame.display.get_surface().get_width()
@@ -21,7 +27,10 @@ class Roman(pygame.sprite.Sprite):
         img_surf = pygame.image.load(settings.PATH_TO_ROMANS)
         self.image = pygame.transform.scale(
             img_surf,
-            settings.get_size_of_character(img_surf, settings.ROMANS_SIZE_DIVIDER)
+            settings.get_size_of_character(
+                img_surf,
+                settings.ROMANS_SIZE_DIVIDER
+            )
         ).convert_alpha()
         self.rect = self.image.get_rect(
             center=self.PLACES_OF_BIRTH
@@ -60,6 +69,8 @@ class Roman(pygame.sprite.Sprite):
         self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS
 
     def go(self):
+        """Движение Римлянина."""
+
         if not self.go_vectors:
             vector = random.choice(self.vectors)
             self.add_go_vectors(vector)
@@ -87,9 +98,9 @@ class Roman(pygame.sprite.Sprite):
             else:
                 if self.crush_music_time_out <= 0:
                     crush_music.play()
-                    self.crush_music_time_out = settings.ROMANS_CRUSH_MUSIC_TIME_OUT
+                    self.crush_music_time_out = self.CRASH_MUSIC_TIME_OUT
                 settings.ASTERIX_LIVES -= settings.ASTERIX_LIVES_ENDS_SPEED
-                self.crush_music_time_out -= settings.ROMANS_CRUSH_MUSIC_ENDS_SPEED
+                self.crush_music_time_out -= self.CRASH_MUSIC_ENDS_SPEED
 
 
 class MagicFlask(pygame.sprite.Sprite):
@@ -104,8 +115,14 @@ class MagicFlask(pygame.sprite.Sprite):
         self.image = pygame.image.load(settings.PATH_TO_FLASK)
         self.rect = self.image.get_rect(
             center=(
-                random.randint(self.image.get_width(), self.WIGHT_OF_SCREEN - self.image.get_width()),
-                random.randint(self.image.get_height(), self.HEIGHT_OF_SCREEN - self.image.get_height())
+                random.randint(
+                    self.image.get_width(),
+                    self.WIGHT_OF_SCREEN - self.image.get_width()
+                ),
+                random.randint(
+                    self.image.get_height(),
+                    self.HEIGHT_OF_SCREEN - self.image.get_height()
+                )
             )
         )
 
@@ -173,6 +190,8 @@ class Cesar(pygame.sprite.Sprite):
         self.go_vectors = [vector] * settings.ROMANS_SMOOTHNESS
 
     def go(self):
+        """Движение Цезаря."""
+
         if not self.go_vectors:
             vector = random.choice(self.vectors)
             self.add_go_vectors(vector)
