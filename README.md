@@ -13,11 +13,13 @@ git clone https://github.com/AlbertSabirzianov/Asterix.git
 ```
 Установите зависимости
 ```commandline
-pip install requirements.txt
+python3 -m venv Asterix
+cd Asterix
+pip install -r requirements.txt
 ```
 Запустите игру
 ```commandline
-python main.py
+python3 main.py
 ```
 # Настройки
 Все аспекты игры вы можете настроить под себя, для этого
