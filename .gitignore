@@ -1,3 +1,2 @@
-venv
-.idea
-TODOLIST.txt
+__pycache__/
+*.pyc
