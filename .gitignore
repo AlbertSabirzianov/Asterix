@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# virtualenv created by uv
+.venv/
